@@ -9,4 +9,10 @@
     <ProjectReference Include="..\..\Services\WeatherGathering.WebAPIClients\WeatherGathering.WebAPIClients.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
