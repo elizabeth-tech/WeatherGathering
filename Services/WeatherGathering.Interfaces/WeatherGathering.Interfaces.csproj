@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\WeatherGathering.Domain\WeatherGathering.Domain.csproj" />
+    <ProjectReference Include="..\WeatherGathering.Interfaces.Base\WeatherGathering.Interfaces.Base.csproj" />
+  </ItemGroup>
+
 </Project>
