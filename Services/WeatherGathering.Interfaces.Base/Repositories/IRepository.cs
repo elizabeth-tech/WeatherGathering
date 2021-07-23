@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WeatherGathering.Interfaces.Base.Entities;
@@ -36,20 +35,5 @@ namespace WeatherGathering.Interfaces.Base.Repositories
         Task<T> Delete(T item, CancellationToken cancel = default);
 
         Task<T> DeleteById(int id, CancellationToken cancel = default);
-    }
-
-    public interface IPage<T>
-    {
-        IEnumerable<T> Items { get; }
-
-        // Сколько элементов во всей выборке
-        int TotalCount { get; }
-
-        int PageIndex { get; }
-
-        int PageSize { get; }
-
-        // Полное кол-во страниц
-        int TotalPagesCount => (int)Math.Ceiling((double)TotalCount / PageSize);
     }
 }
