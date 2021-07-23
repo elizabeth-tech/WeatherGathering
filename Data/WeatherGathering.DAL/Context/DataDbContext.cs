@@ -1,17 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WeatherGathering.DAL.Context
 {
     public class DataDbContext : DbContext
     {
-        public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
-        {
+        public DbSet<DataValue> Values { get; set; }
 
+        public DbSet<DataSource> Sources { get; set; }
+
+        public DataDbContext(DbContextOptions<DataDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder model)
+        {
+            base.OnModelCreating(model);
+
+            model.Entity<DataSource>()
+                .HasMany<DataValue>()
+                .WithOne(v => v.Source) // делаем отношение один ко многим
+                .OnDelete(DeleteBehavior.Cascade); // включаем каскадное удаление
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace WeatherGathering.DAL
 {
     // Класс источника данных
-    class DataSource : NamedEntity
+    public class DataSource : NamedEntity
     {
         public string Description { get; set; }
     }

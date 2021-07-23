@@ -4,7 +4,7 @@ using WeatherGathering.DAL.Entities.Base;
 namespace WeatherGathering.DAL
 {
     // Класс, представляющий данные, получаемые из источника данных
-    class DataValue : Entity
+    public class DataValue : Entity
     {
         // Данные времени в формате UTC
         public DateTimeOffset Time { get; set; } = DateTime.Now; 
