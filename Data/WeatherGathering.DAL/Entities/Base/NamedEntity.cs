@@ -2,8 +2,8 @@
 
 namespace WeatherGathering.DAL.Entities.Base
 {
-    public class NamedEntity : Entity, INamedEntity
+    public abstract class NamedEntity : Entity, INamedEntity
     {
-        public string Name { get; }
+        public string Name { get; set; }
     }
 }
