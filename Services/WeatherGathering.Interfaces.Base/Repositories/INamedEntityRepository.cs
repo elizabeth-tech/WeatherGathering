@@ -6,7 +6,7 @@ namespace WeatherGathering.Interfaces.Base.Repositories
 {
     public interface INamedEntityRepository<T> : IRepository<T> where T : INamedEntity
     {
-        Task<T> ExistName(string name, CancellationToken cancel = default);
+        Task<bool> ExistName(string name, CancellationToken cancel = default);
 
         Task<T> GetByName(string name, CancellationToken cancel = default);
 
