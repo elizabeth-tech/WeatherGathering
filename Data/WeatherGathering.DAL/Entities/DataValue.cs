@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using WeatherGathering.DAL.Entities.Base;
 
 namespace WeatherGathering.DAL
 {
     // Класс, представляющий данные, получаемые из источника данных
+    [Index(nameof(Time))]
     public class DataValue : Entity
     {
         // Данные времени в формате UTC

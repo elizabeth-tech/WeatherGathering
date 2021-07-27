@@ -18,6 +18,10 @@ namespace WeatherGathering.DAL.Context
                 .HasMany<DataValue>()
                 .WithOne(v => v.Source) // делаем отношение один ко многим
                 .OnDelete(DeleteBehavior.Cascade); // включаем каскадное удаление
+
+            //model.Entity<DataSource>()
+            //    .Property(source => source.Name)
+            //    .IsRequired();
         }
     }
 }

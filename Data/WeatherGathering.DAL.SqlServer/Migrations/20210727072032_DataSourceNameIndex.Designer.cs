@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeatherGathering.DAL.Context;
 
 namespace WeatherGathering.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    partial class DataDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210727072032_DataSourceNameIndex")]
+    partial class DataSourceNameIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,8 +65,6 @@ namespace WeatherGathering.DAL.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SourceId");
-
-                    b.HasIndex("Time");
 
                     b.ToTable("Values");
                 });
