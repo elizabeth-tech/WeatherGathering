@@ -18,6 +18,7 @@ namespace WeatherGathering.API.Controllers
         public DataSourcesController(IRepository<DataSource> repository) => this.repository = repository;
 
         [HttpGet("count")] // localhost:44301/api/DataSources/count
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<IActionResult> GetItemsCount() => Ok(await repository.GetCount());
     }
 }
