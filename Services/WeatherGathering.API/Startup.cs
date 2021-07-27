@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using WeatherGathering.API.Data;
 using WeatherGathering.DAL.Context;
+using WeatherGathering.DAL.Repositories;
+using WeatherGathering.Interfaces.Base.Repositories;
 
 namespace WeatherGathering.API
 {
@@ -20,6 +22,10 @@ namespace WeatherGathering.API
                 .GetConnectionString("Data"), o => o.MigrationsAssembly("WeatherGathering.DAL.SqlServer")));
 
             services.AddTransient<DataDbInitializer>();
+
+            // Контейнер сервисов автоматически подставляет репозиторий
+            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+            services.AddScoped(typeof(INamedEntityRepository<>), typeof(DbNamedEntityRepository<>));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
