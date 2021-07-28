@@ -26,6 +26,12 @@ namespace WeatherGathering.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
         public async Task<IActionResult> ExistId(int id) => await repository.ExistId(id) ? Ok(true) : NotFound(false);
 
+        [HttpGet("exist")]
+        [HttpPost("exist")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
+        public async Task<IActionResult> Exist(DataSource item) => await repository.Exist(item) ? Ok(true) : NotFound(false);
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() => Ok(await repository.GetAll());
@@ -46,6 +52,54 @@ namespace WeatherGathering.API.Controllers
             return result.Items.Any() 
                 ? Ok(result) 
                 : NotFound(result);
+        }
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(int id) => await repository
+            .GetById(id) is { } item
+            ? Ok(item) 
+            : (IActionResult)NotFound();
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> Add(DataSource item)
+        {
+            var result = await repository.Add(item);
+
+            // Будет 201 статусный код и ссылка, по которой можно получить новый созданный объект
+            return CreatedAtAction(nameof(GetById), new { id = result.Id });
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(DataSource item)
+        {
+            if (await repository.Update(item) is not { } result)
+                return NotFound(item);
+            return AcceptedAtAction(nameof(GetById), new { id = result.Id });
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(DataSource item)
+        {
+            if (await repository.Delete(item) is not { } result)
+                return NotFound(item);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            if (await repository.DeleteById(id) is not { } result)
+                return NotFound(id);
+            return Ok(result);
         }
     }
 }
