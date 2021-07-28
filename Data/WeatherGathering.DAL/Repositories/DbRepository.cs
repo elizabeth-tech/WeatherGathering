@@ -12,38 +12,35 @@ namespace WeatherGathering.DAL.Repositories
 {
     public class DbRepository<T> : IRepository<T> where T : Entity, new()
     {
-        private readonly DataDbContext _dbContext;
+        private readonly DataDbContext dbContext;
 
         protected DbSet<T> Set { get; }
 
         protected virtual IQueryable<T> Items => Set;
 
+        public bool AutosaveChanges { get; set; }
+
         public DbRepository(DataDbContext dbContext)
         {
-            _dbContext = dbContext;
-            Set = _dbContext.Set<T>();
+            this.dbContext = dbContext;
+            Set = this.dbContext.Set<T>();
         }
 
-        public async Task<bool> ExistId(int id, CancellationToken cancel = default)
-        {
-            return await Items.AnyAsync(item => item.Id == id, cancel).ConfigureAwait(false);
-        }
+        public async Task<bool> ExistId(int id, CancellationToken cancel = default) => await Items
+            .AnyAsync(item => item.Id == id, cancel)
+            .ConfigureAwait(false);
 
-        public async Task<bool> Exist(T item, CancellationToken cancel = default)
-        {
-            if (item is null) throw new ArgumentNullException(nameof(item));
-            return await Items.AnyAsync(item => item.Id == item.Id, cancel).ConfigureAwait(false);
-        }
+        public async Task<bool> Exist(T item, CancellationToken cancel = default) => item is null
+                ? throw new ArgumentNullException(nameof(item))
+                : await Items.AnyAsync(item => item.Id == item.Id, cancel).ConfigureAwait(false);
 
-        public async Task<int> GetCount(CancellationToken cancel = default)
-        {
-            return await Items.CountAsync(cancel).ConfigureAwait(false);
-        }
+        public async Task<int> GetCount(CancellationToken cancel = default) => await Items.
+            CountAsync(cancel)
+            .ConfigureAwait(false);
 
-        public async Task<IEnumerable<T>> GetAll(CancellationToken cancel = default)
-        {
-            return await Items.ToArrayAsync(cancel).ConfigureAwait(false);
-        }
+        public async Task<IEnumerable<T>> GetAll(CancellationToken cancel = default) => await Items
+            .ToArrayAsync(cancel)
+            .ConfigureAwait(false);
 
         public async Task<IEnumerable<T>> GetSkip(int skip, int count, CancellationToken cancel = default)
         {
@@ -86,17 +83,17 @@ namespace WeatherGathering.DAL.Repositories
             return new Page(items, total_count, pageIndex, pageSize);
         }
 
-        public async Task<T> GetById(int id, CancellationToken cancel = default)
-        {
-            return await Items.FirstOrDefaultAsync(item => item.Id == id, cancel).ConfigureAwait(false);
-        }
+        public async Task<T> GetById(int id, CancellationToken cancel = default) => await Items
+            .FirstOrDefaultAsync(item => item.Id == id, cancel)
+            .ConfigureAwait(false);
 
         public async Task<T> Add(T item, CancellationToken cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
-            _dbContext.Entry(item).State = EntityState.Added;
+            dbContext.Entry(item).State = EntityState.Added;
 
-            await _dbContext.SaveChangesAsync(cancel).ConfigureAwait(false);
+            if (AutosaveChanges)
+                await SaveChanges(cancel).ConfigureAwait(false);
 
             return item;
         }
@@ -104,8 +101,9 @@ namespace WeatherGathering.DAL.Repositories
         public async Task<T> Update(T item, CancellationToken cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
-            _dbContext.Update(item);
-            await _dbContext.SaveChangesAsync(cancel).ConfigureAwait(false);
+            dbContext.Update(item);
+            if (AutosaveChanges)
+                await SaveChanges(cancel).ConfigureAwait(false);
 
             return item;
         }
@@ -117,8 +115,9 @@ namespace WeatherGathering.DAL.Repositories
             if (!await ExistId(item.Id, cancel))
                 return null;
 
-            _dbContext.Remove(item);
-            await _dbContext.SaveChangesAsync(cancel).ConfigureAwait(false);
+            dbContext.Remove(item);
+            if (AutosaveChanges)
+                await SaveChanges(cancel).ConfigureAwait(false);
 
             return item;
         }
@@ -136,5 +135,9 @@ namespace WeatherGathering.DAL.Repositories
 
             return await Delete(item, cancel).ConfigureAwait(false);
         }
+
+        public async Task<int> SaveChanges(CancellationToken cancel = default) => await dbContext
+            .SaveChangesAsync(cancel)
+            .ConfigureAwait(false);
     }
 }
