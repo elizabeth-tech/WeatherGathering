@@ -34,5 +34,18 @@ namespace WeatherGathering.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<DataSource>>> Get(int skip, int count) => 
             Ok(await repository.GetSkip(skip, count));
+
+        // Постраничное разбиение
+        [HttpGet("page/{pageIndex:int}/{pageSize:int}")]
+        [HttpGet("page[[{pageIndex:int}/{pageSize:int}]]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IPage<DataSource>>> GetPage(int pageIndex, int pageSize)
+        {
+            var result = await repository.GetPage(pageIndex, pageSize);
+            return result.Items.Any() 
+                ? Ok(result) 
+                : NotFound(result);
+        }
     }
 }
