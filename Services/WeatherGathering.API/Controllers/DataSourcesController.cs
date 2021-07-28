@@ -20,5 +20,19 @@ namespace WeatherGathering.API.Controllers
         [HttpGet("count")] // localhost:44301/api/DataSources/count
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public async Task<IActionResult> GetItemsCount() => Ok(await repository.GetCount());
+
+        [HttpGet("exist/id/{id:int}")] // localhost:44301/api/DataSources/exist/id/56
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
+        public async Task<IActionResult> ExistId(int id) => await repository.ExistId(id) ? Ok(true) : NotFound(false);
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll() => Ok(await repository.GetAll());
+
+        [HttpGet("items[[{skip:int}:{count:int}]]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<DataSource>>> Get(int skip, int count) => 
+            Ok(await repository.GetSkip(skip, count));
     }
 }
