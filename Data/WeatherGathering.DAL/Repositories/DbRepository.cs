@@ -50,7 +50,15 @@ namespace WeatherGathering.DAL.Repositories
             if (count <= 0)
                 return Enumerable.Empty<T>();
 
-            var query = Items;
+            IQueryable<T> query = Items switch
+            {
+                // Если пришла упорядоченная последовательность, то с ней дальше и работаем
+                IOrderedQueryable<T> ordered_query => ordered_query,
+
+                // Если последовательность не была упорядочена, то упорядочиваем
+                { } q => q.OrderBy(i => i.Id)
+            };
+
             if (skip > 0)
                 query = query.Skip(skip);
 
