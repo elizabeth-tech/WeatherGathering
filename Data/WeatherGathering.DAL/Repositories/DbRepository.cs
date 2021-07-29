@@ -18,7 +18,7 @@ namespace WeatherGathering.DAL.Repositories
 
         protected virtual IQueryable<T> Items => Set;
 
-        public bool AutosaveChanges { get; set; }
+        public bool AutosaveChanges { get; set; } = true;
 
         public DbRepository(DataDbContext dbContext)
         {
@@ -63,7 +63,11 @@ namespace WeatherGathering.DAL.Repositories
         }
 
 
-        protected record Page(IEnumerable<T> Items, int TotalCount, int PageIndex, int PageSize) : IPage<T>;
+        protected record Page(IEnumerable<T> Items, int TotalCount, int PageIndex, int PageSize) : IPage<T>
+        {
+            public int TotalPagesCount => (int)Math.Ceiling((double)TotalCount / PageSize);
+        }
+
         public async Task<IPage<T>> GetPage(int pageIndex, int pageSize, CancellationToken cancel = default)
         {
             if (pageSize <= 0)

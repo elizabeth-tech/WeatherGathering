@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,7 +68,7 @@ namespace WeatherGathering.API.Controllers
             var result = await repository.Add(item);
 
             // Будет 201 статусный код и ссылка, по которой можно получить новый созданный объект
-            return CreatedAtAction(nameof(GetById), new { id = result.Id });
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpPut]
@@ -79,7 +78,7 @@ namespace WeatherGathering.API.Controllers
         {
             if (await repository.Update(item) is not { } result)
                 return NotFound(item);
-            return AcceptedAtAction(nameof(GetById), new { id = result.Id });
+            return AcceptedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpDelete]
