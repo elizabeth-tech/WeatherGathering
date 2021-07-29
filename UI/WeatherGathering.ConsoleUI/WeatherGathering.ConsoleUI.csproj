@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\WeatherGathering.DAL\WeatherGathering.DAL.csproj" />
     <ProjectReference Include="..\..\Services\WeatherGathering.WebAPIClients\WeatherGathering.WebAPIClients.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -126,6 +127,8 @@ namespace WeatherGathering.WebAPIClients.Repositories
             public int PageIndex { get; init; }
 
             public int PageSize { get; init; }
+
+            int TotalPagesCount => (int)Math.Ceiling((double)TotalCount / PageSize);
         } 
     }
 }
