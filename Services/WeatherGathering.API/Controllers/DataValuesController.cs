@@ -4,8 +4,8 @@ using WeatherGathering.Interfaces.Base.Repositories;
 
 namespace WeatherGathering.API.Controllers
 {
-    public class DataSourcesController : EntityController<DataSource>
+    public class DataValuesController : EntityController<DataValue>
     {
-        public DataSourcesController(IRepository<DataSource> repository) : base(repository) { }
+        public DataValuesController(IRepository<DataValue> repository) : base(repository) { }
     }
 }
