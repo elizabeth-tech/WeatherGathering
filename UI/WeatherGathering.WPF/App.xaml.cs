@@ -1,8 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Windows;
+using WeatherGathering.DAL;
+using WeatherGathering.Interfaces.Base.Repositories;
+using WeatherGathering.WebAPIClients.Repositories;
 using WeatherGathering.WPF.ViewModels;
 using WeatherGathering.WPF.Views.Windows;
 
@@ -32,6 +36,12 @@ namespace WeatherGathering.WPF
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
             services.AddScoped<MainWindowViewModel>();
+
+            services.AddHttpClient<IRepository<DataSource>, WebRepository<DataSource>>(
+                client =>
+                {
+                    client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/DataSources/");
+                });
         }
 
         // Запуск хостинга
