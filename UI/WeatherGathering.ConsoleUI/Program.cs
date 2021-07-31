@@ -41,16 +41,21 @@ namespace WeatherGathering.ConsoleUI
             var data_sources = Services.GetRequiredService<IRepository<DataSource>>();
 
             var start_count = await data_sources.GetCount();
-            Console.WriteLine($"\n>>>   Элементов в репозитории start: {start_count}\n");
 
-            //var sources = await data_sources.GetAll();
+            Console.WriteLine($"\n>>>   Привет. Я тестовое консольное приложение.\n");
+
+            Console.WriteLine($"\n>>>   Элементов в репозитории в начале работы: {start_count}\n");
+
+            var sources = await data_sources.GetAll();
 
             //var sources = await data_sources.GetSkip(3, 5);
 
-            //foreach (var source in sources)
-            //{
-            //    Console.WriteLine($"{source.Id}-{source.Name}");
-            //}
+            Console.WriteLine($"\n>>>   Вывожу все элементы репозитория...\n");
+            foreach (var source in sources)
+            {
+                Console.WriteLine($"{source.Id}-{source.Name}");
+            }
+            Console.WriteLine();
 
             //var page = await data_sources.GetPage(4, 3);
 
@@ -69,22 +74,17 @@ namespace WeatherGathering.ConsoleUI
             //        Description = $"Edited descr"
             //    });
 
-            var first = (await data_sources.GetSkip(0, 2).ConfigureAwait(false)).ToArray();
+            //var first = (await data_sources.GetSkip(0, 2).ConfigureAwait(false)).ToArray();
 
-            var deleted = await data_sources.DeleteById(first[0].Id);
-            var _deleted = await data_sources.Delete(first[1]);
+            //var deleted = await data_sources.DeleteById(first[0].Id);
+            //var _deleted = await data_sources.Delete(first[1]);
 
             var end_count = await data_sources.GetCount();
 
-            Console.WriteLine($"\n>>>   Элементов в репозитории end: {end_count}\n");
+            Console.WriteLine($"\n>>>   Элементов в репозитории в конце работы: {end_count}\n");
 
-            var sources = await data_sources.GetAll();
-            foreach (var source in sources)
-            {
-                Console.WriteLine($"{source.Id}-{source.Name}");
-            }
 
-            Console.WriteLine("Completed!");
+            Console.WriteLine("Все действия отработаны успешно!");
             Console.ReadKey();
 
             await host.StopAsync();
